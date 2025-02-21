@@ -24,18 +24,15 @@ def addPostService():
         image_file = request.files["image"]
         if image_file.filename != "":
             filename = secure_filename(image_file.filename) 
-            # Lấy thư mục upload từ config, nếu chưa có thì tạo mới
             upload_folder = current_app.config.get("UPLOAD_FOLDER", "uploads")
             if not os.path.exists(upload_folder):
                 os.makedirs(upload_folder)
             # Tạo đường dẫn lưu file
             full_path = os.path.join(upload_folder, filename)
             image_file.save(full_path)
-            # Lưu đường dẫn tương đối (để client có thể truy cập)
             image_path = f"/uploads/{filename}"
     
     try:
-        # Tạo bài post mới với userId từ token, content và đường dẫn hình ảnh
         newPost = Post(userId, content, image = image_path)
         db.session.add(newPost)
         db.session.commit()
@@ -46,7 +43,7 @@ def addPostService():
 
 def getPostByIdService(post_id):
     try:
-        # Sử dụng eager loading để join user, comments (với user) và likes
+        # Eager loading để join user, comments (với user) và likes
         post = (
             Post.query.options(
                 joinedload(Post.user),
@@ -100,7 +97,7 @@ def getPostByIdService(post_id):
     
 def getAllPostsService():
     try:
-        # Sử dụng eager loading để join các bảng liên quan
+        # eager loading 
         posts = (
             Post.query.options(
                 joinedload(Post.user),
@@ -182,7 +179,7 @@ def deletePostService(id):
 
 def getPostsFromUserService(userId):
     try:
-        # Sử dụng eager loading để join các bảng liên quan
+        # eager loading 
         posts = (
             Post.query.options(
                 joinedload(Post.user),
@@ -192,7 +189,6 @@ def getPostsFromUserService(userId):
             .filter(Post.userId == userId)
             .all()
         )
-
         result = []
         for post in posts:
             post_data = {
@@ -262,7 +258,6 @@ def getPostCommentsService(postId):
             'data': [],
             "message": "No comments available!"
         }), 200
-
     except Exception as e:  
         db.session.rollback()
         return jsonify({"error": str(e), "message": "Can not get comments!"}), 500

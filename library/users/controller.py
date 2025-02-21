@@ -17,7 +17,7 @@ def getUserByUsername(username):
 def getAllUsers():
     return getAllUsersService()
 
-# update 
+# update: FE chưa có
 @users.route("/<int:id>", methods=['PUT'])
 def updateUserById(id):
     return updateUserByIdService(id)

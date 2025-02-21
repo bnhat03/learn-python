@@ -14,7 +14,6 @@ def loginService():
     data = request.json
     password = data['password']
     email = data['email']
-    
     user = User.query.filter_by(email=email).first()
     if not user:
         return jsonify({"error": "Invalid email or password"}), 401

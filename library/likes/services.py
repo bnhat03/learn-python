@@ -36,7 +36,6 @@ def getUserLikesService(userId):
             .filter(Like.userId == userId)
             .all()
         )
-
         result = []
         for post in posts:
             post_data = {
@@ -75,7 +74,6 @@ def getUserLikesService(userId):
             result.append(post_data)
 
         return jsonify({"data": result, "message": "Get all posts successfully!"}), 200
-
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e), "message": "Error retrieving posts"}), 500

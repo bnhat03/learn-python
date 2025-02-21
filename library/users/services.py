@@ -3,8 +3,6 @@ from library.library_ma import UserSchema
 from library.model import User
 from flask import request, jsonify
 from flask_bcrypt import Bcrypt
-from sqlalchemy.sql import func
-import json
 bcrypt = Bcrypt()
 
 user_schema = UserSchema()
@@ -19,7 +17,7 @@ def addUserService():
     avatar = data['avatar']
     bio = data['bio']
     try:
-        # Kiểm tra xem user có tồn tại không
+        # user existed
         user = User.query.filter((User.email == email) | (User.username == username)).all()
         if user: 
             return jsonify({"message": "Username or email existed!"}), 400

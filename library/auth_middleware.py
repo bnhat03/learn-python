@@ -1,6 +1,5 @@
-# auth_middleware.py
 from functools import wraps
-from flask import request, jsonify, current_app, g
+from flask import request, jsonify, g
 import jwt
 import os
 from dotenv import load_dotenv
@@ -14,7 +13,6 @@ def token_required(f):
         if not auth_header or not auth_header.startswith("Bearer "):
             return jsonify({"message": "Token is missing!"}), 401
         token = auth_header.split(" ")[1]
-
         try:
             # decode token sử dụng SECRET_KEY 
             payload = jwt.decode(token, os.environ.get("SECRET_KEY"), algorithms=["HS256"])
